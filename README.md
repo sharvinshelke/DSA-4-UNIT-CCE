@@ -3,11 +3,11 @@ Objective
 
 To develop an Employee Record Management System using a Binary Search Tree (BST) in C++.
 
-Problem Statement
+:Problem Statement
 
 Create a system to insert and delete employee records and display the height, leaf nodes, internal nodes, and nodes with exactly one child in a BST.
 
-Features
+:Features
 
 Insert employee ID.
 
@@ -23,7 +23,7 @@ Count internal nodes.
 
 Count nodes with exactly one child.
 
-Algorithm
+:Algorithm
 
 Start the program.
 
@@ -41,7 +41,7 @@ Repeat until the user selects Exit.
 
 Stop the program.
 
-Sample Output
+:Sample Output
 
 1.Insert 2.Delete 3.Display
 4.Properties 5.Exit
@@ -72,6 +72,6 @@ Delete ID: 20
 Choice: 3
 10 30 40
 
-Conclusion
+:Conclusion
 
 The Employee Record Management System successfully demonstrates employee ID insertion, deletion, and display using a BST. It also calculates the tree height and counts leaf nodes, internal nodes, and nodes with exactly one child.
