@@ -3,57 +3,88 @@ using namespace std;
 
 struct Node {
     int id;
-    Node* next;
+    Node *l, *r;
+    Node(int x) { id=x; l=r=NULL; }
 };
 
-Node* head = NULL;
+Node* insert(Node* t, int x) {
+    if (!t) return new Node(x);
+    if (x < t->id) t->l=insert(t->l,x);
+    else if (x > t->id) t->r=insert(t->r,x);
+    return t;
+}
+
+Node* del(Node* t, int x) {
+    if (!t) return NULL;
+    if (x < t->id) t->l=del(t->l,x);
+    else if (x > t->id) t->r=del(t->r,x);
+    else {
+        if (!t->l || !t->r) {
+            Node* p=t->l ? t->l : t->r;
+            delete t; return p;
+        }
+        Node* p=t->r;
+        while (p->l) p=p->l;
+        t->id=p->id;
+        t->r=del(t->r,p->id);
+    }
+    return t;
+}
+
+int h(Node* t) {
+    if (!t) return 0;
+    return 1+max(h(t->l),h(t->r));
+}
+
+int leaf(Node* t) {
+    if (!t) return 0;
+    if (!t->l && !t->r) return 1;
+    return leaf(t->l)+leaf(t->r);
+}
+
+int internal(Node* t) {
+    if (!t || (!t->l && !t->r)) return 0;
+    return 1+internal(t->l)+internal(t->r);
+}
+
+int one(Node* t) {
+    if (!t) return 0;
+    return ((t->l==NULL) != (t->r==NULL))
+           +one(t->l)+one(t->r);
+}
+
+void display(Node* t) {
+    if (t) {
+        display(t->l);
+        cout << t->id << " ";
+        display(t->r);
+    }
+}
 
 int main() {
-    int ch, id;
+    Node* root=NULL;
+    int ch,x;
 
     do {
-        cout << "\n1.Add  2.Display  3.Search  4.Delete  5.Exit\n";
+        cout << "\n1.Insert 2.Delete 3.Display";
+        cout << "\n4.Properties 5.Exit\nChoice: ";
         cin >> ch;
 
-        if (ch == 1) {
-            Node* n = new Node;
-            cout << "Enter Bag ID: ";
-            cin >> n->id;
-            n->next = head;
-            head = n;
+        if (ch==1) {
+            cout << "Employee ID: "; cin >> x;
+            root=insert(root,x);
         }
-        else if (ch == 2) {
-            Node* t = head;
-            while (t != NULL) {
-                cout << t->id << " -> ";
-                t = t->next;
-            }
-            cout << "NULL\n";
+        else if (ch==2) {
+            cout << "Delete ID: "; cin >> x;
+            root=del(root,x);
         }
-        else if (ch == 3) {
-            cout << "Enter ID: ";
-            cin >> id;
-            Node* t = head;
-            while (t != NULL && t->id != id)
-                t = t->next;
-            cout << (t ? "Found\n" : "Not Found\n");
+        else if (ch==3) display(root);
+        else if (ch==4) {
+            cout << "Height: " << h(root);
+            cout << "\nLeaf nodes: " << leaf(root);
+            cout << "\nInternal nodes: " << internal(root);
+            cout << "\nNodes with one child: " << one(root);
         }
-        else if (ch == 4) {
-            cout << "Enter ID: ";
-            cin >> id;
-            Node *t = head, *p = NULL;
-            while (t != NULL && t->id != id) {
-                p = t;
-                t = t->next;
-            }
-            if (t != NULL) {
-                if (p == NULL) head = t->next;
-                else p->next = t->next;
-                delete t;
-                cout << "Deleted\n";
-            } else cout << "Not Found\n";
-        }
-    } while (ch != 5);
-
+    } while (ch!=5);
     return 0;
 }
